@@ -1,0 +1,41 @@
+<script>
+	/* HOW TO IMPLEMENT 
+   
+    1. Add a wrapper element with the class name "post_duration-wrapper" around the element that should display the reading time and has the content to be calculated.
+    2. Add a time-to-read attribute to the element that should display the reading time. The value of the attribute should be a class name that is unique to the content that should be measured.
+    3. Add the class name from the time-to-read attribute to the element that should be measured.
+    4. Add the script below to the page.
+    5. Done! The script will automatically calculate the reading time and display it in the element with the time-to-read attribute.     
+     */
+
+	const WRAPPER_CLASS_NAME = 'post_duration-wrapper';
+	const ATTRIBUTE_NAME = 'time-to-read';
+
+	function calculateAndSetReadingTime() {
+		const allWrappers = document.querySelectorAll(`.${WRAPPER_CLASS_NAME}`);
+
+		allWrappers.forEach(wrapper => {
+			// Get the time-to-read element
+			const element = wrapper.querySelector(`[time-to-read]`);
+			// Get the class name from the time-to-read attribute
+			const className = element.getAttribute(ATTRIBUTE_NAME).trim();
+			// Find the corresponding content element using the class name
+			const contentElement = wrapper.querySelector(`${className}`);
+			// Calculate the reading time based on the content (assumes 200 words per minute)
+			const wordsInContent = contentElement.textContent.split(/\s+/).length;
+			const minutesToRead = Math.ceil(wordsInContent / 200);
+			// Set the calculated time as the content of the time-to-read element
+			element.textContent = minutesToRead;
+		});
+	}
+
+	// Add an event listener for every time the DOM content changes
+	document.addEventListener('DOMSubtreeModified', function () {
+		calculateAndSetReadingTime();
+	});
+
+	// Remove event listener when the page is unloaded
+	window.addEventListener('beforeunload', function () {
+		document.removeEventListener('DOMSubtreeModified', calculateAndSetReadingTime);
+	});
+</script>
