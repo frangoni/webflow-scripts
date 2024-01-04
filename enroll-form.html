@@ -1,0 +1,128 @@
+<script>
+	const COMMENT_TEMPLATE = 'comment_template';
+	const COMMENTS_CONTAINER = 'comments_container';
+	let request = new XMLHttpRequest();
+	let xanoUrl = new URL('https://x8ki-letl-twmt.n7.xano.io/api:R6MJarNa/comments'); // Base URL for your Xano APIs
+
+	const postURL = window.location.href;
+	let postSlug = postURL.split('/').pop();
+
+	function getComments() {
+		let url = `${xanoUrl}?slug=${postSlug}`;
+		request.open('GET', url, true);
+		request.onload = function () {
+			let data = JSON.parse(this.response);
+			if (request.status >= 200 && request.status < 400) {
+				const cardContainer = document.getElementById(COMMENTS_CONTAINER);
+				if (data.length) {
+					data.forEach(comments_id => {
+						const style = document.getElementById(COMMENT_TEMPLATE);
+						const card = style.cloneNode(true);
+						card.setAttribute('id', '');
+						card.style.display = 'block';
+						const author = card.querySelector('#comment_author');
+						author.textContent = comments_id.name;
+						const date = card.querySelector('#comment_date');
+						const formatedDate = new Date(comments_id.created_at).toLocaleDateString('en-US', {
+							year: 'numeric',
+							month: 'long',
+							day: 'numeric',
+						});
+						date.textContent = formatedDate;
+						const p = card.querySelector('#comment_body');
+						p.textContent = `${comments_id.comment}`;
+						cardContainer.appendChild(card);
+					});
+				} else {
+					const style = document.getElementById(COMMENT_TEMPLATE);
+					const card = style.cloneNode(true);
+					card.setAttribute('id', '');
+					card.style.display = 'block';
+					card.removeChild(card.querySelector('.comment_author-wrapper'));
+					const p = card.querySelector('#comment_body');
+					p.textContent = `No comments yet.`;
+					cardContainer.appendChild(card);
+				}
+			}
+		};
+		request.send();
+	}
+
+	(function () {
+		getComments();
+	})();
+
+	var Webflow = Webflow || [];
+	Webflow.push(function () {
+		// unbind webflow form handling (keep this if you only want to affect specific forms)
+		$(document).off('submit');
+		/* Any form on the page */
+		$('form').submit(function (e) {
+			e.preventDefault();
+			const $form = $(this);
+			const $submit = $('[type=submit]', $form);
+			const buttonText = $submit.val();
+			const buttonWaitingText = $submit.attr('data-wait');
+			const formMethod = $form.attr('method');
+			const formAction = $form.attr('action');
+			const formRedirect = $form.attr('data-redirect');
+
+			let requestURL = formAction;
+			let formData = new FormData();
+
+			$form.serializeArray().forEach(item => {
+				formData.append(item.name, item.value);
+			});
+			formData.append('slug', postSlug);
+			if (buttonWaitingText) {
+				$submit.val(buttonWaitingText);
+			}
+
+			$.ajax(requestURL, {
+				enctype: 'multipart/form-data',
+				data: formData,
+				method: formMethod,
+				cache: false,
+				contentType: false,
+				processData: false,
+			})
+
+				.done(res => {
+					$form[0].reset();
+					if (formRedirect) {
+						window.location = formRedirect;
+						return;
+					}
+				})
+
+				.fail(res => {
+					$form
+						.siblings('.w-form-done')
+						.hide() // Hide success
+						.siblings('.w-form-fail')
+						.show(); // show failure
+				})
+				.always(() => {
+					$submit.val(buttonText);
+				});
+
+			function removeComments(parent) {
+				while (parent.firstChild) {
+					parent.removeChild(parent.firstChild);
+				}
+			}
+			(function () {
+				const container = document.getElementById(COMMENTS_CONTAINER);
+				console.log('Unloading comments...');
+				removeComments(container);
+				console.log('Refreshing comments...');
+				let now = Date.now(),
+					end = now + 300;
+				while (now < end) {
+					now = Date.now();
+				}
+				getComments();
+			})();
+		});
+	});
+</script>

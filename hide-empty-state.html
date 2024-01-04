@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <script>
 	function emptyStateDisplay() {
 		var faqComponents = document.querySelectorAll('.faq_component');
@@ -36,3 +37,43 @@
 		},
 	]);
 </script>
+=======
+<script>
+	function emptyStateDisplay() {
+		var faqComponents = document.querySelectorAll('.faq_component');
+
+		faqComponents.forEach(function (faqComponent) {
+			if (faqComponent.querySelector('.empty-state')) {
+				faqComponent.style.display = 'none';
+			}
+		});
+	}
+
+	document.addEventListener('DOMSubtreeModified', emptyStateDisplay);
+
+	window.addEventListener('beforeunload', function () {
+		document.removeEventListener('DOMSubtreeModified', emptyStateDisplay);
+	});
+</script>
+
+<script>
+	window.fsAttributes = window.fsAttributes || [];
+	window.fsAttributes.push([
+		'cmsload',
+		listInstances => {
+			// The callback passes a `listInstances` array with all the `CMSList` instances on the page.
+			const [listInstance] = listInstances;
+			// The `renderitems` event runs whenever the list renders items after switching pages.
+			listInstance.on('renderitems', renderedItems => {
+				setTimeout(() => {
+					if ($('.fs-empty').is(':visible')) {
+						$('[fs-empty-mirror]').show();
+					} else {
+						$('[fs-empty-mirror]').hide();
+					}
+				}, 100);
+			});
+		},
+	]);
+</script>
+>>>>>>> 6053c3d2db0bd5d0854053cf1c8d2b21f3d518bd
