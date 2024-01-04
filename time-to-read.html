@@ -1,0 +1,52 @@
+<script>
+	/* HOW TO IMPLEMENT 
+   
+    1. Add a wrapper element with the class name "post_duration-wrapper" around the element that should display the reading time and has the content to be calculated.
+    2. Add a time-to-read attribute to the element that should display the reading time. The value of the attribute should be a class name that is unique to the content that should be measured.
+    3. Add the class name from the time-to-read attribute to the element that should be measured.
+    4. Add the script below to the page.
+    5. Done! The script will automatically calculate the reading time and display it in the element with the time-to-read attribute.     
+     */
+	const WRAPPER_CLASS_NAME = 'post_duration-wrapper';
+	const ATTRIBUTE_NAME = 'time-to-read';
+
+	function setReadTime(element) {
+		// Get the time-to-read element
+		const timeToReadElement = element.querySelector(`[time-to-read]`);
+		// Get the class name from the time-to-read attribute
+		const className = timeToReadElement.getAttribute(ATTRIBUTE_NAME).trim();
+		// Find the corresponding content element using the class name
+		const contentElement = element.querySelector(`${className}`);
+		if (contentElement) {
+			// Calculate the reading time based on the content (assumes 200 words per minute)
+			const wordsInContent = contentElement.textContent.split(/\s+/).length;
+			const minutesToRead = Math.ceil(wordsInContent / 200);
+
+			// Set the calculated time as the content of the time-to-read element
+			timeToReadElement.textContent = minutesToRead;
+		}
+	}
+
+	window.onload = () => {
+		//Set time on page load
+		const postDurationElements = document.querySelectorAll(`.${WRAPPER_CLASS_NAME}`);
+		postDurationElements.forEach(setReadTime);
+	};
+
+	window.fsAttributes = window.fsAttributes || [];
+	window.fsAttributes.push([
+		'cmsload',
+		listInstances => {
+			// The callback passes a `listInstances` array with all the `CMSList` instances on the page.
+			const [listInstance] = listInstances;
+			// The `renderitems` event runs whenever the list renders items after switching pages.
+			listInstance.on('renderitems', renderedItems => {
+				//Set time after switching pages for new elements
+				renderedItems.forEach(item => {
+					const { element } = item;
+					setReadTime(element);
+				});
+			});
+		},
+	]);
+</script>
