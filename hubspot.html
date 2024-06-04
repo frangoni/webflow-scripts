@@ -1,0 +1,52 @@
+<!-- HubSpot API -->
+<script>
+	let hsApiUrl = 'https://api.hsforms.com/submissions/v3/integration/submit/44446391/';
+	let formData = {
+		fields: [],
+	};
+
+	$('[hs-form]').on('submit', function (event) {
+		let hsForm = $(this);
+		let hsFormID = $(this).attr('hs-form');
+		if (hsFormID == undefined) return;
+		let hsEndPoint = hsApiUrl + hsFormID;
+		let redirectURL = $(this).attr('redirect-url');
+		// Add the form data to the formData object
+		hsForm.find('[hs-form-field]').each(function () {
+			let field = {
+				name: $(this).attr('hs-form-field'),
+				value: $(this).val(),
+			};
+			formData.fields.push(field);
+		});
+		console.log('HubSpot Form Data:', formData);
+		// Make a POST request to HubSpot
+		fetch(hsEndPoint, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(formData),
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('HubSpot Form Submission Successful:', data);
+
+				const { redirectUri } = data;
+
+				if (redirectURL != undefined) {
+					setTimeout(() => {
+						window.location = redirectURL;
+					}, 1000);
+				} else if (redirectUri != undefined) {
+					setTimeout(() => {
+						window.location = redirectUri;
+					}, 1000);
+				}
+			})
+			.catch(error => {
+				console.error('HubSpot Form Submission Error:', error);
+				// Handle error, e.g., show an error message to the user
+			});
+	});
+</script>

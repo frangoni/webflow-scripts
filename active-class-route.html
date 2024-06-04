@@ -1,0 +1,38 @@
+<script>
+	$(document).ready(function () {
+		const itemClass = '.accordion-item';
+		const itemWrapperClass = '.accordion-item_wrapper';
+		const activeClass = 'is-active';
+		const accordionClass = '.accordion';
+		const accordionTrigger = '.accordion-trigger';
+		let hasOpenedInitial = false;
+
+		function setActiveClass() {
+			let items = $(itemClass);
+
+			items.each(function (index, collectionItem) {
+				const url = window.location.pathname;
+				const category = url
+					.split('/')
+					.filter(segment => segment !== '')
+					.pop();
+
+				if ($(collectionItem).text().toLowerCase() === category.replace(/-/g, ' ')) {
+					$(collectionItem).closest(itemWrapperClass).addClass(activeClass);
+				}
+			});
+
+			let accordions = $(accordionClass);
+			accordions.each(function (index, accordion) {
+				if ($(accordion).find('.' + activeClass).length > 0) {
+					if (!hasOpenedInitial) {
+						$(accordion).find(accordionTrigger).click();
+						hasOpenedInitial = true;
+					}
+				}
+			});
+		}
+
+		$(document).on('htmx:afterSwap', setActiveClass);
+	});
+</script>

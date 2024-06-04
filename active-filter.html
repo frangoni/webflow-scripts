@@ -1,0 +1,33 @@
+<script>
+	// The index of the filter to track (in case there are more than one)
+	const CATEGORY_INDEX = 1;
+	const SEARCH_INDEX = 0;
+
+	window.fsAttributes = window.fsAttributes || [];
+	window.fsAttributes.push([
+		'cmsfilter',
+		filterInstances => {
+			// The callback passes a `filterInstances` array with all the `CMSFilters` instances on the page.
+			const [filterInstance] = filterInstances;
+
+			// The `renderitems` event runs whenever the list renders items after filtering.
+			filterInstance.listInstance.on('renderitems', renderedItems => {
+				const activeCategory = Array.from(filterInstance.filtersData[CATEGORY_INDEX].values)[0];
+				const searchFilter = Array.from(filterInstance.filtersData[SEARCH_INDEX].values)[0];
+
+				if (activeCategory) {
+					$('[active-category]').text(activeCategory);
+					$('[filter-category]').addClass('is-active');
+				} else {
+					$('[active-category]').text('All');
+					$('[filter-category]').removeClass('is-active');
+				}
+				if (searchFilter) {
+					$('[filter-search]').addClass('is-active');
+				} else {
+					$('[filter-search]').removeClass('is-active');
+				}
+			});
+		},
+	]);
+</script>

@@ -1,0 +1,26 @@
+<!-- Horizontal Timeline Track -->
+<script>
+	$('.section-timeline_sticky').each(function () {
+		let itemsTriggers = $(this).find('.timeline-sticky_track-item');
+		const section = $(this);
+
+		for (let i = 0; i <= itemsTriggers.length; i++) {
+			const dash_bg = $(section).find(`.dash-bg.is-${i + 1}`);
+			gsap.set(dash_bg, { transformOrigin: 'right' });
+
+			const trackTrigger = {
+				trigger: itemsTriggers[i],
+				start: 'center center',
+				end: '+=300',
+				markers: true,
+				toggleActions: 'play pause none reverse',
+				scrub: 1,
+			};
+			gsap.fromTo(
+				dash_bg,
+				{ scaleX: '100%' },
+				{ scaleX: '0%', duration: 1, ease: 'power2.out', scrollTrigger: trackTrigger }
+			);
+		}
+	});
+</script>

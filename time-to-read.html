@@ -1,8 +1,10 @@
 <script>
 	/* HOW TO IMPLEMENT 
    
-    1. Add a wrapper element with the class name "post_duration-wrapper" around the element that should display the reading time and has the content to be calculated.
-    2. Add a time-to-read attribute to the element that should display the reading time. The value of the attribute should be a class name that is unique to the content that should be measured.
+    1. Add a wrapper element with the class name "post_duration-wrapper" around the element that should
+		display the reading time and has the content to be calculated.
+    2. Add a time-to-read attribute to the element that should display the reading time. 
+		The value of the attribute should be a class name that is unique to the content that should be measured. Example '.text-content'
     3. Add the class name from the time-to-read attribute to the element that should be measured.
     4. Add the script below to the page.
     5. Done! The script will automatically calculate the reading time and display it in the element with the time-to-read attribute.     
@@ -23,7 +25,7 @@
 			const minutesToRead = Math.ceil(wordsInContent / 200);
 
 			// Set the calculated time as the content of the time-to-read element
-			timeToReadElement.textContent = minutesToRead;
+			timeToReadElement.textContent = minutesToRead || 0;
 		}
 	}
 
@@ -50,3 +52,17 @@
 		},
 	]);
 </script>
+
+<style>
+	.form_label {
+		transition: top linear 0.1s;
+	}
+	.form_input:focus + .form_label,
+	.form_input:not(:placeholder-shown) + .form_label {
+		top: -50%;
+	}
+
+	.is-select-input option:checked + .form_label {
+		top: -50%;
+	}
+</style>

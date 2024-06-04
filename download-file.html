@@ -1,0 +1,84 @@
+<!-- Whitepapers and Reports -->
+<script>
+	// Constants for modal elements and attributes
+	const MODAL_CLASS = '[w-r_modal]';
+	const OPEN_MODAL_ATTR = '[open-modal]';
+	const DOCUMENT_LINK_ATTR = '[document-link]';
+	const FILE_DOWNLOAD_BUTTON_ATTR = '[file-download]';
+	const FORM_CLASS = '.download-file_form';
+	const FORM_SUCCESS_CLASS = '.download-file_success';
+	const CLOSE_BUTTON_CLASS = '.close_modal';
+
+	// GSAP timeline for modal animations
+	const timeline = gsap.timeline({ paused: true });
+	timeline
+		.to('._w-r-modal_component', { display: 'flex', duration: 0 })
+		.to(CLOSE_BUTTON_CLASS, { y: '0%', opacity: '1', duration: 0.22, ease: 'power2.inOut' })
+		.to('.download_form-wrapper', { y: '0%', opacity: '1', duration: 0.25, ease: 'power2.inOut' });
+
+	// Function to open the modal
+	function openModal() {
+		timeline.play();
+	}
+
+	// Function to close the modal
+	function closeModal() {
+		timeline.reverse();
+	}
+
+	// Add click event to the close button
+	$(CLOSE_BUTTON_CLASS).on('click', closeModal);
+
+	//Add keypress event to close modal on Esc
+	$(document).on('keydown', function (e) {
+		if (e.key === 'Escape') closeModal();
+	});
+
+	// Function to reset the form
+	function resetForm() {
+		const form = $(FORM_CLASS);
+		form.trigger('reset');
+		form.css('display', 'flex');
+		$(FORM_SUCCESS_CLASS).css('display', 'none');
+	}
+
+	// Function to attach download link to the download button in the modal
+	function attachDownloadLink(button) {
+		const documentLink = button.find(DOCUMENT_LINK_ATTR).attr('href');
+		if (documentLink) {
+			const modal = $(MODAL_CLASS);
+			const fileDownloadButton = modal.find(FILE_DOWNLOAD_BUTTON_ATTR);
+			fileDownloadButton.attr('href', documentLink).attr('rel', 'nofollow');
+		}
+	}
+
+	// Function to add event listeners to download buttons
+	function addDownloadButtonEvents() {
+		const downloadButtons = $(OPEN_MODAL_ATTR);
+		downloadButtons.each(function () {
+			const button = $(this);
+			button.off('click').on('click', function (e) {
+				e.preventDefault();
+				openModal();
+				attachDownloadLink(button);
+				resetForm();
+			});
+		});
+	}
+
+	// Initial call to add event listeners
+	addDownloadButtonEvents();
+
+	// Check for page height changes and re-add event listeners if needed
+	let lastPageHeight = document.documentElement.scrollHeight;
+	const checkPageHeight = () => {
+		const currentPageHeight = document.documentElement.scrollHeight;
+		if (lastPageHeight !== currentPageHeight) {
+			addDownloadButtonEvents();
+		}
+		lastPageHeight = currentPageHeight;
+	};
+
+	// Set interval to check for page height changes
+	setInterval(checkPageHeight, 1000); // check every second
+</script>

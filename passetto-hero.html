@@ -1,0 +1,42 @@
+<!-- Hero Animation -->
+<script>
+	const waveElements = [
+		document.querySelector('.ellipse.is-1'),
+		document.querySelector('.ellipse.is-2'),
+		document.querySelector('.ellipse.is-3'),
+		document.querySelector('.ellipse.is-4'),
+		document.querySelector('.ellipse.is-5'),
+	];
+	const waveGenerator = waveElements[0];
+	const waves = waveElements.slice(1);
+
+	const scrollTriggerConfig = {
+		trigger: '.section-hero',
+		toggleActions: 'play pause resume reset',
+	};
+
+	const createWaveTimeline = (element, delay = 0) => {
+		return gsap
+			.timeline({
+				...scrollTriggerConfig,
+				repeat: -1,
+				delay: delay,
+			})
+			.to(element, { scale: '0.9', opacity: 1, duration: 1 })
+			.to(element, { scale: '3', opacity: '0', duration: 11 });
+	};
+
+	gsap.set(waves, { scale: '1', opacity: '0' });
+
+	const waveGeneratorTl = gsap
+		.timeline({
+			scrollTrigger: scrollTriggerConfig,
+			repeat: -1,
+			ease: 'power4.in',
+		})
+		.to(waveGenerator, { scale: '0.9', duration: 1 })
+		.to(waveGenerator, { scale: '1', duration: 2 });
+
+	const delays = [0, 3, 6, 9];
+	waves.forEach((element, index) => createWaveTimeline(element, delays[index]));
+</script>
