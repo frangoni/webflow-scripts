@@ -1,0 +1,14 @@
+<!-- Hero -->
+<script>
+	gsap.set('.hero_rotating-word', { y: '100%', opacity: 0 });
+
+	let tl = gsap.timeline({ repeat: -1 });
+
+	$('.hero_rotating-word').each(function (index, element) {
+		tl.to(element, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }).to(
+			element,
+			{ y: '-100%', opacity: 0, duration: 0.5, ease: 'power2.in' },
+			'+=3'
+		);
+	});
+</script>

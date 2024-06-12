@@ -1,0 +1,61 @@
+<script>
+	const stickyCardsWrapper = $('.sticky-wrapper');
+	const stickyCards = stickyCardsWrapper.children();
+	const OFFSET_REM = 3.25;
+	$(document).ready(function () {
+		stickyCards.each(setTopSticky);
+
+		function setTopSticky(index, elem) {
+			const top = OFFSET_REM * index;
+			$(elem).css('top', top + 'rem');
+		}
+	});
+</script>
+
+<style>
+	/*  STICKY CARDS COMPONENT */
+	[image-alignment='is-left'] {
+		top: auto;
+		bottom: 0%;
+		left: 12%;
+		right: 0%;
+	}
+	[image-alignment='is-right'] {
+		top: auto;
+		bottom: 0%;
+		left: auto;
+		right: 12%;
+	}
+	[image-size='is-large'] {
+		width: 55%;
+	}
+
+	.sticky-wrapper > :nth-child(1) {
+		background-color: var(--neutrals--n1);
+		border: 1px solid var(--neutrals--n2);
+	}
+	.sticky-wrapper > :nth-child(2) {
+		background-color: var(--neutrals--n2);
+	}
+	.sticky-wrapper > :nth-child(3) {
+		background-color: var(--neutrals--n3);
+	}
+	.sticky-wrapper > :nth-child(4) {
+		background-color: var(--neutrals--n4);
+	}
+	.sticky-wrapper > :nth-child(5) {
+		background-color: var(--neutrals--n5);
+	}
+	.sticky-wrapper > :nth-child(6) {
+		background-color: var(--neutrals--n6);
+	}
+	.sticky-wrapper > :nth-child(7) {
+		background-color: var(--neutrals--n7);
+	}
+	.sticky-wrapper > :nth-child(8) {
+		background-color: var(--neutrals--n8);
+	}
+	.sticky-wrapper > :nth-child(9) {
+		background-color: var(--neutrals--n9);
+	}
+</style>

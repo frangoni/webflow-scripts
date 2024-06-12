@@ -4,6 +4,7 @@
 	let formData = {
 		fields: [],
 	};
+	let UTMs = ['utm_medium', 'utm_source', 'utm_campaign', 'utm_term', 'utm_content'];
 
 	$('[hs-form]').on('submit', function (event) {
 		let hsForm = $(this);
@@ -18,6 +19,17 @@
 				value: $(this).val(),
 			};
 			formData.fields.push(field);
+		});
+		// Add the UTM parameters to the formData object
+		UTMs.forEach(utm => {
+			let utmValue = new URLSearchParams(window.location.search).get(utm);
+			if (utmValue != null) {
+				let field = {
+					name: utm,
+					value: utmValue,
+				};
+				formData.fields.push(field);
+			}
 		});
 		console.log('HubSpot Form Data:', formData);
 		// Make a POST request to HubSpot

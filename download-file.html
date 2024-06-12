@@ -4,6 +4,7 @@
 	const MODAL_CLASS = '[w-r_modal]';
 	const OPEN_MODAL_ATTR = '[open-modal]';
 	const DOCUMENT_LINK_ATTR = '[document-link]';
+	const DOCUMENT_NAME_ATTR = 'document-name';
 	const FILE_DOWNLOAD_BUTTON_ATTR = '[file-download]';
 	const FORM_CLASS = '.download-file_form';
 	const FORM_SUCCESS_CLASS = '.download-file_success';
@@ -24,6 +25,18 @@
 	// Function to close the modal
 	function closeModal() {
 		timeline.reverse();
+		resetForm();
+	}
+
+	// Function to download file
+	function addDownloadLink(data, name, anchor) {
+		fetch(data)
+			.then(response => response.blob())
+			.then(blob => {
+				const url = window.URL.createObjectURL(blob);
+				anchor.attr('href', url);
+				anchor.attr('download', name);
+			});
 	}
 
 	// Add click event to the close button
@@ -37,18 +50,25 @@
 	// Function to reset the form
 	function resetForm() {
 		const form = $(FORM_CLASS);
+		const formSuccess = $(FORM_SUCCESS_CLASS);
+		const anchor = formSuccess.find(FILE_DOWNLOAD_BUTTON_ATTR);
+		anchor.attr('href', '');
+		anchor.attr('download', '');
 		form.trigger('reset');
 		form.css('display', 'flex');
-		$(FORM_SUCCESS_CLASS).css('display', 'none');
+		formSuccess.css('display', 'none');
 	}
 
 	// Function to attach download link to the download button in the modal
-	function attachDownloadLink(button) {
-		const documentLink = button.find(DOCUMENT_LINK_ATTR).attr('href');
+	async function attachDownloadLink(button) {
+		const hiddenButton = button.find(DOCUMENT_LINK_ATTR);
+		const documentLink = hiddenButton.attr('href');
+		const documentName = hiddenButton.attr(DOCUMENT_NAME_ATTR);
+
 		if (documentLink) {
 			const modal = $(MODAL_CLASS);
-			const fileDownloadButton = modal.find(FILE_DOWNLOAD_BUTTON_ATTR);
-			fileDownloadButton.attr('href', documentLink).attr('rel', 'nofollow');
+			const anchor = modal.find(FILE_DOWNLOAD_BUTTON_ATTR);
+			await addDownloadLink(documentLink, documentName, anchor);
 		}
 	}
 
@@ -58,10 +78,8 @@
 		downloadButtons.each(function () {
 			const button = $(this);
 			button.off('click').on('click', function (e) {
-				e.preventDefault();
 				openModal();
 				attachDownloadLink(button);
-				resetForm();
 			});
 		});
 	}

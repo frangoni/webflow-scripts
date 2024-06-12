@@ -1,0 +1,55 @@
+<!-- Menu Hover -->
+<script>
+	const dropdownCategory = document.querySelectorAll('[nav-dropdown-category]');
+	const dropdownLink = document.querySelectorAll('[nav-dropdown-links]');
+
+	// Hide all initially
+	dropdownLink.forEach(link => {
+		link.style.display = 'none';
+	});
+
+	dropdownCategory.forEach((category, index) => {
+		const dropdownSelector = category.getAttribute('nav-dropdown-category');
+		const link = document.querySelector(`[nav-dropdown-links="${dropdownSelector}"]`);
+
+		// Show the first link on initial load
+		if (index === 0) {
+			link.style.display = 'flex';
+		}
+
+		// Hover Function
+		category.addEventListener('mouseover', function () {
+			// Hide all other links
+			dropdownCategory.forEach(hover => {
+				const hoverValue = hover.getAttribute('nav-dropdown-category');
+				const hoverLink = document.querySelector(`[nav-dropdown-links="${hoverValue}"]`);
+				if (hoverLink) {
+					hoverLink.style.display = hoverValue === dropdownSelector ? 'flex' : 'none';
+					hoverValue !== dropdownSelector && hover.classList.remove('active');
+				}
+			});
+			// Show the current link
+			link.style.display = 'flex';
+			category.classList.add('active');
+		});
+
+		// Click Function
+		category.addEventListener('click', function () {
+			const currentCategory = category.getAttribute('nav-dropdown-category');
+			// If the dropdownSelector equals the currentCategory, don't do anything
+			if (dropdownSelector === currentCategory) return;
+			// Hide all other links
+			dropdownCategory.forEach(click => {
+				const clickValue = click.getAttribute('nav-dropdown-category');
+				const clickLink = document.querySelector(`[nav-dropdown-links="${clickValue}"]`);
+				if (clickLink) {
+					clickLink.style.display = clickValue === dropdownSelector ? 'none' : 'flex';
+					hoverValue !== dropdownSelector && hover.classList.remove('active');
+				}
+			});
+			// Show the current link
+			link.style.display = 'flex';
+			category.classList.add('active');
+		});
+	});
+</script>

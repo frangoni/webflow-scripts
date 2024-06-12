@@ -1,0 +1,21 @@
+<script>
+	$(document).ready(function () {
+		function updateTabLabel() {
+			const tabs = $('.w-tab-link');
+			tabs.each(function () {
+				$(this).on('click', function () {
+					const tabName = $(this).find('.body-p2').text();
+					$('[tab-label]').text(tabName);
+				});
+			});
+		}
+
+		function setInitialTabLabel() {
+			const initialTab = $('.w-tab-link[aria-selected="true"]');
+			const initialTabName = initialTab.find('.body-p2').text();
+			$('[tab-label]').text(initialTabName);
+		}
+		setInitialTabLabel();
+		updateTabLabel();
+	});
+</script>
