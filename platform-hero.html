@@ -1,0 +1,59 @@
+<!-- Platforms Hero -->
+<script>
+	$('.section-hero-platform').each(function () {
+		let image = $('.platform_bg-blurred');
+		let icons = $('.platform_floating-icon');
+		let person = $('.platform_person');
+		let personCardsWrapper = $('.platform_person-cards');
+
+		gsap.set(icons, { opacity: 0, y: 50 });
+		gsap.set(image, { scale: 1.1, y: 0 });
+		gsap.set(person, { opacity: 0, y: 50 });
+
+		let tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '.main-wrapper',
+				start: 'top top',
+				end: '+=750',
+				scrub: true,
+			},
+		});
+
+		tl.to(image, { scale: 1.2, y: 100 }, 0);
+
+		icons.each(function (index) {
+			gsap.to(this, {
+				y: -100 - index * 50,
+				scale: 1.2,
+				ease: 'power2.out',
+				scrollTrigger: {
+					trigger: '.main-wrapper',
+					start: 'top top',
+					end: '+=750',
+					scrub: true,
+				},
+			});
+		});
+		gsap.to(personCardsWrapper, {
+			opacity: 1,
+			duration: 0.5,
+			ease: 'power2.out',
+		});
+
+		gsap.to(icons, {
+			opacity: 1,
+			y: 0,
+			duration: 1,
+			ease: 'power2.out',
+			stagger: 0.2,
+			delay: 0.5,
+		});
+		gsap.to(person, {
+			opacity: 1,
+			y: 0,
+			duration: 1,
+			ease: 'power2.out',
+			delay: 0.5,
+		});
+	});
+</script>

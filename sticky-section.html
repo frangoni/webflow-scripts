@@ -2,12 +2,14 @@
 	const stickyCardsWrapper = $('.sticky-wrapper');
 	const stickyCards = stickyCardsWrapper.children();
 	const OFFSET_REM = 3.25;
-	$(document).ready(function () {
+	$('.sticky-wrapper').each(function () {
 		stickyCards.each(setTopSticky);
 
 		function setTopSticky(index, elem) {
 			const top = OFFSET_REM * index;
+			const marginBottom = OFFSET_REM * (stickyCards.length - index - 1);
 			$(elem).css('top', top + 'rem');
+			$(elem).css('margin-bottom', marginBottom + 'rem');
 		}
 	});
 </script>

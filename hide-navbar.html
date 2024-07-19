@@ -1,0 +1,16 @@
+<script>
+	$(document).ready(function () {
+		let navbar = $('.navbar_component');
+
+		let lastScrollTop = 0;
+		$(window).scroll(function () {
+			let scrollTop = $(this).scrollTop();
+			if (scrollTop > lastScrollTop) {
+				navbar.css('transform', 'translateY(-100%)');
+			} else {
+				navbar.css('transform', 'translateY(0%)');
+			}
+			lastScrollTop = scrollTop;
+		});
+	});
+</script>
