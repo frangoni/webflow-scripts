@@ -1,0 +1,30 @@
+<script>
+	const IMG_CLASS = '.elementor-post__thumbnail .attachment-medium';
+
+	const images = document.querySelectorAll(IMG_CLASS);
+	const downloadImage = (url, filename) => {
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = filename;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	};
+
+	images.forEach((img, index) => {
+		const srcSet = img.getAttribute('srcset');
+		if (srcSet) {
+			const srcs = srcSet.split(',').map(src => src.trim());
+			const bestSrc = srcs.reduce((max, current) => {
+				const currentResolution = parseInt(current.split(' ')[1].replace('w', ''), 10);
+				const maxResolution = parseInt(max.split(' ')[1].replace('w', ''), 10);
+				return currentResolution > maxResolution ? current : max;
+			});
+			if (bestSrc) {
+				const url = bestSrc.split(' ')[0];
+				const filename = url.split('/').pop();
+				setTimeout(() => downloadImage(url, filename), index * 1000);
+			}
+		}
+	});
+</script>

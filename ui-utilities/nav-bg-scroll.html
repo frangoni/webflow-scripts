@@ -1,0 +1,24 @@
+<script>
+	/*
+	   1. Add combo class to nav to change navbar styles
+	   2. Add transition to navbar
+	   3. Set the correct options
+	   */
+
+	const OPTIONS = {
+		OFFSET: 100,
+		BG_CLASS: 'is-scrolled',
+		NAV_CLASS: 'navbar_layout',
+		EXTRA_CLASSES: ['navbar_menu', 'nav_menu-cta-wrapper'],
+	};
+
+	const { OFFSET, BG_CLASS, NAV_CLASS, EXTRA_CLASSES } = OPTIONS;
+	const navbar = document.querySelector(`.${NAV_CLASS}`);
+	const allClasses = [NAV_CLASS, ...EXTRA_CLASSES];
+
+	window.addEventListener('scroll', () => {
+		window.scrollY > OFFSET
+			? allClasses.forEach(className => document.querySelector(`.${className}`).classList.add(BG_CLASS))
+			: allClasses.forEach(className => document.querySelector(`.${className}`).classList.remove(BG_CLASS));
+	});
+</script>

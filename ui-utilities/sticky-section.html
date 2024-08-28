@@ -1,0 +1,18 @@
+<script>
+	const isMobile = window.innerWidth < 768;
+	const stickyCardsWrapper = $('.coloured_cards-wrapper');
+	const stickyCards = stickyCardsWrapper.children();
+	const OFFSET_REM = 3;
+	const GLOBAL_OFFSET = isMobile ? 1 : 6;
+	stickyCardsWrapper.each(function () {
+		stickyCards.each(setTopSticky);
+
+		function setTopSticky(index, elem) {
+			const top = GLOBAL_OFFSET + OFFSET_REM * (index + 1);
+			const bottom = GLOBAL_OFFSET + OFFSET_REM * (stickyCards.length - index);
+			const marginBottom = bottom + 1;
+			$(elem).css('top', top + 'rem');
+			$(elem).css('margin-bottom', marginBottom + 'rem');
+		}
+	});
+</script>

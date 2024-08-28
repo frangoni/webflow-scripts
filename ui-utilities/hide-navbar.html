@@ -1,11 +1,14 @@
+<!-- HIDE SCROLLBAR ON SCROLL -->
 <script>
+	const NAVBAR_WRAPPER = '.navbar_component';
+	const OFFSET_Y = 500;
 	$(document).ready(function () {
-		let navbar = $('.navbar_component');
+		let navbar = $(NAVBAR_WRAPPER);
 
 		let lastScrollTop = 0;
 		$(window).scroll(function () {
 			let scrollTop = $(this).scrollTop();
-			if (scrollTop > lastScrollTop) {
+			if (scrollTop > lastScrollTop && scrollTop > OFFSET_Y) {
 				navbar.css('transform', 'translateY(-100%)');
 			} else {
 				navbar.css('transform', 'translateY(0%)');

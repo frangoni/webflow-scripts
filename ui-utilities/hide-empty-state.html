@@ -1,0 +1,40 @@
+<script>
+	window.fsAttributes = window.fsAttributes || [];
+	window.fsAttributes.push([
+		'cmsload',
+		listInstances => {
+			// The callback passes a `listInstances` array with all the `CMSList` instances on the page.
+			const [listInstance] = listInstances;
+			// The `renderitems` event runs whenever the list renders items after switching pages.
+			listInstance.on('renderitems', renderedItems => {
+				setTimeout(() => {
+					if ($('.fs-empty').is(':visible')) {
+						$('[fs-empty-mirror]').show();
+					} else {
+						$('[fs-empty-mirror]').hide();
+					}
+				}, 100);
+			});
+		},
+	]);
+</script>
+
+<script>
+	const listWrapperClass = '.faq_list-wrapper';
+	const emptyClass = '.w-dyn-empty';
+	function emptyStateDisplay() {
+		let faqComponents = document.querySelectorAll(listWrapperClass);
+
+		faqComponents.forEach(function (faqComponent) {
+			if (faqComponent.querySelector(emptyClass)) {
+				faqComponent.style.display = 'none';
+			}
+		});
+	}
+
+	document.addEventListener('DOMSubtreeModified', emptyStateDisplay);
+
+	window.addEventListener('beforeunload', function () {
+		document.removeEventListener('DOMSubtreeModified', emptyStateDisplay);
+	});
+</script>
