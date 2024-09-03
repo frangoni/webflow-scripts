@@ -1,0 +1,47 @@
+<script>
+	const REMOVE_STARTING_ACTIVE = true;
+
+	$('[accordion-wrapper]').each(function () {
+		let items = $(this).find('[is-trigger]');
+		let currentItem = 0;
+
+		REMOVE_STARTING_ACTIVE &&
+			(function removeAllActive() {
+				items.removeClass('is-active');
+				items.find('[is-active]').removeClass('is-active');
+			})();
+
+		//ADD CLICK EVENT
+		items.each(function (index) {
+			$(this).on('click', function () {
+				if ($(this).hasClass('is-active')) {
+					console.log('has class', $(this));
+					removeActive($(this));
+				} else {
+					changeActiveItem(index);
+				}
+			});
+		});
+
+		//OPENS ACCORDION AND ADDS is-active CLASS TO ALL CHILD ELEMENTS WITH [is-active]
+		function changeActiveItem(index) {
+			// Remove active class from all items and their children
+			items.removeClass('is-active');
+			items.find('[is-active]').removeClass('is-active');
+
+			// Add active class to the selected item and its children
+			let selectedItem = items.eq(index);
+			selectedItem.addClass('is-active');
+			selectedItem.find('[is-active]').addClass('is-active');
+
+			currentItem = index;
+		}
+
+		//REMOVES is-active CLASS FROM THE ITEM AND ALL ITS CHILD ELEMENTS WITH [is-active]
+		function removeActive(item) {
+			// Remove active class from the item and its children
+			item.removeClass('is-active');
+			item.find('[is-active]').removeClass('is-active');
+		}
+	});
+</script>

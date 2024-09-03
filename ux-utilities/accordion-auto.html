@@ -1,0 +1,65 @@
+<script>
+	let intervalId;
+
+	$('[accordion-wrapper]').each(function () {
+		const DURATION = $(this).attr('accordion-duration');
+		let items = $(this).find('[is-trigger]');
+		let activeItems = $(this).find('[is-active]');
+		let trigger = $(this);
+		let currentItem = 0;
+		let timerStarted = false;
+
+		//ADD CLICK EVENT
+		items.each(function (index) {
+			items.on('click', function () {
+				if ($(this).hasClass('is-active')) return;
+				pauseTimer();
+				changeActiveItem(index);
+			});
+		});
+
+		//OPENS ACCORDION AND ADD is-active CLASS TO ALL ELEMENTS THAT NEEDS
+		function changeActiveItem(index) {
+			items.removeClass('is-active');
+			items.find('[is-active]').removeClass('is-active');
+			let selectedItem = items.eq(index);
+			selectedItem.addClass('is-active');
+			selectedItem.find('[is-active]').addClass('is-active');
+			currentItem = index;
+		}
+
+		ScrollTrigger.create({
+			trigger,
+			start: 'top center',
+			end: 'bottom center',
+			markers: true,
+			onEnter: () => {
+				changeActiveItem(currentItem);
+				startTimer();
+			},
+			onEnterBack: () => {
+				changeActiveItem(currentItem);
+				startTimer();
+			},
+			onLeave: () => pauseTimer(),
+			onLeaveBack: () => pauseTimer(),
+		});
+
+		// Timer
+		function startTimer() {
+			if (timerStarted) return;
+			timerStarted = true;
+			intervalId = setInterval(nextItem, DURATION);
+		}
+
+		function nextItem() {
+			let nextItem = currentItem + 1;
+			if (nextItem >= items.length) nextItem = 0;
+			changeActiveItem(nextItem);
+		}
+		function pauseTimer() {
+			clearInterval(intervalId);
+			timerStarted = false;
+		}
+	});
+</script>

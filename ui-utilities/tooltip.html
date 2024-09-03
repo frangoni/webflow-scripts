@@ -1,0 +1,27 @@
+<!-- Pricing Tooltip -->
+<script>
+	$('.pricing_list-item').each(function (index, element) {
+		const tooltip = $(this).find('.pricing_tooltip-slot-wrapper');
+		const icon = $(this).find('.pricing_info-icon');
+
+		gsap.set(tooltip, { autoAlpha: 0, y: -10 });
+
+		$(icon).on('mouseenter', function () {
+			gsap.to(tooltip, {
+				duration: 0.3,
+				autoAlpha: 1,
+				x: 0,
+				ease: 'power2.out',
+			});
+		});
+
+		$(icon).on('mouseleave', function () {
+			gsap.to(tooltip, {
+				duration: 0.3,
+				autoAlpha: 0,
+				x: -10,
+				ease: 'power2.in',
+			});
+		});
+	});
+</script>
