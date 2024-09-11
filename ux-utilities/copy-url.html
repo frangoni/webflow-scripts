@@ -1,0 +1,21 @@
+<script>
+	$(document).ready(function () {
+		$('[copy-url]').on('click', function () {
+			const $this = $(this);
+			const url = window.location.href;
+
+			navigator.clipboard
+				.writeText(url)
+				.then(function () {
+					$this.addClass('copied');
+
+					setTimeout(function () {
+						$this.removeClass('copied');
+					}, 2000);
+				})
+				.catch(function (err) {
+					console.error('Failed to copy: ', err);
+				});
+		});
+	});
+</script>

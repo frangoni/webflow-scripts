@@ -1,0 +1,33 @@
+<script>
+	const AUTH_CONTENT = '[auth]';
+	const UNAUTH_CONTENT = '[unauth]';
+
+	function getQueryParam(param) {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(param);
+	}
+
+	function checkAccess() {
+		const isShared = getQueryParam('share') === 'true';
+		const isUnlocked = localStorage.getItem('unlocked') === 'true';
+		if (isShared) localStorage.setItem('unlocked', true);
+
+		if (!isShared && !isUnlocked) {
+			document.querySelectorAll(AUTH_CONTENT).forEach(element => {
+				element.style.display = 'none';
+			});
+			document.querySelectorAll(UNAUTH_CONTENT).forEach(element => {
+				element.style.display = 'block';
+			});
+		} else {
+			document.querySelectorAll(AUTH_CONTENT).forEach(element => {
+				element.style.display = '';
+			});
+			document.querySelectorAll(UNAUTH_CONTENT).forEach(element => {
+				element.style.display = 'none';
+			});
+		}
+	}
+
+	checkAccess();
+</script>

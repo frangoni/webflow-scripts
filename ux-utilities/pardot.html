@@ -1,0 +1,47 @@
+<!-- Pardot API -->
+<script>
+	$('#pardot-form').on('submit', function (event) {
+		console.log('EVENT', event);
+		let formData = { fields: [] };
+		let pardotFormHandlerURL = $(this).attr('pardot-form');
+		if (pardotFormHandlerURL == undefined) return;
+		let pardotForm = $(this);
+		let redirectURL = $(this).attr('redirect-url');
+		console.log('REDIRECT URL', redirectURL);
+		// Add the form data to the formData object
+		pardotForm.find('[pardot-form-field]').each(function () {
+			let field = {
+				name: $(this).attr('pardot-form-field'),
+				value: $(this).val(),
+			};
+			formData.fields.push(field);
+		});
+		// Make a POST request to Pardot
+		fetch(pardotFormHandlerURL, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams(formData).toString(), // Encode form data
+		})
+			.then(response => {
+				if (response.ok) {
+					// Success: handle Pardot submission success (e.g., show a confirmation message)
+					console.log('Pardot submission successful');
+					// ... add your success handling code here
+
+					//IF VENTURE BEACON FORM
+					/* localStorage.setItem('unlocked', 'true');				
+					window.location.reload(); */
+				} else {
+					// Error: handle Pardot submission failure
+					console.error('Pardot submission failed');
+					// ... add your error handling code here
+				}
+			})
+			.catch(error => {
+				console.error('Error submitting to Pardot:', error);
+				// ... handle any network or fetch errors
+			});
+	});
+</script>
