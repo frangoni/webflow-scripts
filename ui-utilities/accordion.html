@@ -1,8 +1,16 @@
+<!-- Accordion group -->
 <script>
+	/*  1. Add [accordion-wrapper] to div containing all accordions
+		2. Add [is-trigger] to clicking area to trigger the accordion
+		3. Add an .is-active class with its properties to every element that should change when active
+		4. Add [is-active] to all elements targeted on bullet 3.
+		5. Add [is-accordion] to all accordions inside [accordion-wrapper]
+ 	*/
+
 	const REMOVE_STARTING_ACTIVE = true;
 
 	$('[accordion-wrapper]').each(function () {
-		let items = $(this).find('[is-trigger]');
+		let items = $(this).find('[is-accordion]');
 		let currentItem = 0;
 
 		REMOVE_STARTING_ACTIVE &&
@@ -11,25 +19,19 @@
 				items.find('[is-active]').removeClass('is-active');
 			})();
 
-		//ADD CLICK EVENT
 		items.each(function (index) {
-			$(this).on('click', function () {
-				if ($(this).hasClass('is-active')) {
-					console.log('has class', $(this));
-					removeActive($(this));
-				} else {
-					changeActiveItem(index);
-				}
+			const item = $(this);
+			const trigger = item.find('[is-trigger]');
+			trigger.css('cursor', 'pointer');
+			trigger.on('click', function () {
+				item.hasClass('is-active') ? removeActive(item) : changeActiveItem(index);
 			});
 		});
 
-		//OPENS ACCORDION AND ADDS is-active CLASS TO ALL CHILD ELEMENTS WITH [is-active]
 		function changeActiveItem(index) {
-			// Remove active class from all items and their children
 			items.removeClass('is-active');
 			items.find('[is-active]').removeClass('is-active');
 
-			// Add active class to the selected item and its children
 			let selectedItem = items.eq(index);
 			selectedItem.addClass('is-active');
 			selectedItem.find('[is-active]').addClass('is-active');
@@ -37,9 +39,7 @@
 			currentItem = index;
 		}
 
-		//REMOVES is-active CLASS FROM THE ITEM AND ALL ITS CHILD ELEMENTS WITH [is-active]
 		function removeActive(item) {
-			// Remove active class from the item and its children
 			item.removeClass('is-active');
 			item.find('[is-active]').removeClass('is-active');
 		}

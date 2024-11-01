@@ -1,0 +1,175 @@
+<!-- Sticky Tabs w/ Trigger -->
+<script>
+	$(document).ready(function () {
+		if ($(window).width() < 480) return;
+
+		const containers = $('.sticky_absolute-container');
+		const triggers = $('.sticky_trigger');
+
+		containers.each(function (index) {
+			index === 0 ? gsap.set($(this), { autoAlpha: 1 }) : gsap.set($(this), { autoAlpha: 0 });
+		});
+
+		triggers.each(function (index) {
+			const triggerElement = $(this);
+
+			ScrollTrigger.create({
+				trigger: triggerElement,
+				start: 'top bottom',
+				onEnter: function () {
+					containers.each(function () {
+						gsap.to($(this), { autoAlpha: 0, duration: 0.5 });
+					});
+					gsap.to(containers.eq(index), { autoAlpha: 1, duration: 0.5 });
+				},
+				onLeaveBack: function () {
+					if (index > 0) {
+						containers.each(function () {
+							gsap.to($(this), { autoAlpha: 0, duration: 0.5 });
+						});
+						gsap.to(containers.eq(index - 1), { autoAlpha: 1, duration: 0.5 });
+					}
+				},
+			});
+		});
+	});
+</script>
+
+<script>
+	const icons = gsap.utils.toArray('.features_animated-icon');
+	const ovals = [$('#oval-1'), $('#oval-2'), $('#oval-3'), $('#oval-4')];
+
+	const circles = [
+		$('#circle-1'),
+		$('#circle-2'),
+		$('#circle-3'),
+		$('#circle-4'),
+		$('#circle-5'),
+		$('#circle-6'),
+		$('#circle-7'),
+		$('#circle-8'),
+	];
+	const defaults = {
+		duration: 1,
+		yoyo: true,
+		repeat: -1,
+		ease: 'power1.inOut',
+		repeatDelay: 0.75,
+	};
+
+	const propertiesMapping = [
+		{
+			r: $(circles[5]).attr('r'),
+			stroke: $(circles[5]).attr('stroke'),
+			strokeDasharray: $(circles[5]).attr('stroke-dasharray'),
+			cx: $(circles[5]).attr('cx'),
+			cy: $(circles[5]).attr('cy'),
+		}, // circle-1 takes circle-6 properties
+		{
+			r: $(circles[6]).attr('r'),
+			stroke: $(circles[6]).attr('stroke'),
+			strokeDasharray: $(circles[6]).attr('stroke-dasharray'),
+			cx: $(circles[6]).attr('cx'),
+			cy: $(circles[6]).attr('cy'),
+		}, // circle-2 takes circle-7 properties
+		{
+			r: $(circles[7]).attr('r'),
+			stroke: $(circles[7]).attr('stroke'),
+			strokeDasharray: $(circles[7]).attr('stroke-dasharray'),
+			cx: $(circles[7]).attr('cx'),
+			cy: $(circles[7]).attr('cy'),
+		}, // circle-3 takes circle-8 properties
+		{
+			r: $(circles[4]).attr('r'),
+			stroke: $(circles[4]).attr('stroke'),
+			strokeDasharray: $(circles[4]).attr('stroke-dasharray'),
+			cx: $(circles[4]).attr('cx'),
+			cy: $(circles[4]).attr('cy'),
+		}, // circle-4 takes circle-5 properties
+		{
+			r: $(circles[1]).attr('r'),
+			stroke: $(circles[1]).attr('stroke'),
+			strokeDasharray: $(circles[1]).attr('stroke-dasharray'),
+			cx: $(circles[1]).attr('cx'),
+			cy: $(circles[1]).attr('cy'),
+		}, // circle-5 takes circle-2 properties
+		{
+			r: $(circles[2]).attr('r'),
+			stroke: $(circles[2]).attr('stroke'),
+			strokeDasharray: $(circles[2]).attr('stroke-dasharray'),
+			cx: $(circles[2]).attr('cx'),
+			cy: $(circles[2]).attr('cy'),
+		}, // circle-6 takes circle-3 properties
+		{
+			r: $(circles[3]).attr('r'),
+			stroke: $(circles[3]).attr('stroke'),
+			strokeDasharray: $(circles[3]).attr('stroke-dasharray'),
+			cx: $(circles[3]).attr('cx'),
+			cy: $(circles[3]).attr('cy'),
+		}, // circle-7 takes circle-4 properties
+		{
+			r: $(circles[0]).attr('r'),
+			stroke: $(circles[0]).attr('stroke'),
+			strokeDasharray: $(circles[0]).attr('stroke-dasharray'),
+			cx: $(circles[0]).attr('cx'),
+			cy: $(circles[0]).attr('cy'),
+		}, // circle-8 takes circle-1 properties
+	];
+
+	function animateCircles() {
+		circles.forEach((circle, index) => {
+			const { stroke, cx, cy, r, strokeDasharray } = propertiesMapping[index];
+			console.log('Stroke:', stroke, 'Dash Array:', typeof strokeDasharray);
+
+			$(circle).attr('stroke', stroke);
+
+			gsap.to(circle, {
+				attr: {
+					r,
+					/* stroke,
+						'stroke-dasharray': strokeDasharray || '0 0', */
+					cx,
+					cy,
+				},
+				...defaults,
+				yoyo: true,
+			});
+		});
+	}
+
+	function animateOvals() {
+		gsap.to(ovalGroup, {
+			rotation: '+=45',
+			transformOrigin: '0 0',
+			...defaults,
+			onUpdate: function () {
+				const ovals = ovalGroup.children;
+				Array.from(ovals).forEach(oval => {
+					const currentDashArray = oval.getAttribute('stroke-dasharray');
+					oval.setAttribute('stroke-dasharray', currentDashArray === '2.4 2.4' ? '1.2 1.2' : '2.4 2.4');
+				});
+			},
+		});
+	}
+
+	//ANIMATION ICON 1
+	gsap.to(icons[0], {
+		onStart: animateOvals,
+	});
+
+	//ANIMATION ICON 2
+	gsap.to(icons[1], {
+		onStart: animateCircles,
+	});
+
+	//ANIMATION ICON 3
+	gsap.to(icons[2], {
+		rotation: 135,
+		...defaults,
+	});
+	//ANIMATION ICON 4
+	gsap.to(icons[3], {
+		rotation: 90,
+		...defaults,
+	});
+</script>

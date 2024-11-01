@@ -1,0 +1,173 @@
+<!-- 
+To check all ease options available visit:
+https://gsap.com/docs/v3/Eases/
+    
+===== Triggers =====
+scroll, hover-in, hover-in-out(reverse the anim on out), click.
+    
+===== ScrollTrigger =====
+When the animation should start and end. The default is top 80% bottom 20%. You can use any of the following keywords for each trigger: top, bottom, left, right, center, or a number in pixels or percentage.
+    
+===== Toggle Actions =====
+Determines how the linked animation is controlled at the 4 distinct toggle places - onEnter, onLeave, onEnterBack, and onLeaveBack. The default is play none none none. So toggleActions: "play pause resume reset" will play the animation when entering, pause it when leaving, resume it when entering again backwards, and reset (rewind back to the beginning) when scrolling all the way back past the beginning. You can use any of the following keywords for each action: "play", "pause", "resume", "reset", "restart", "complete", "reverse", and "none".
+    
+===== Directions =====
+up, down, left, right.
+    
+===== Split Into =====
+lines, words, letters, elements (works on elements with children).
+    
+===== Timeline Position =====
+https://gsap.com/docs/v3/GSAP/gsap.timeline()/#positioning-animations-from-a-timeline
+    
+By default all timelines start at the same time, if you want to start at a different time you can set the position in the timeline.
+
+===== Advanced =====
+am-group-target="NAME"
+am-group-trigger="NAME"
+am-var-VARIABLE_NAME="VALUE"
+am-set-PROPERTY_NAME="VALUE"
+-->
+
+<!-- Variables - Group -->
+<meta
+	am-settings="group-variables"
+	am-trigger="scroll"
+	am-markers="false"
+	am-scroll-start="top 90%"
+	am-scroll-end="bottom 80%"
+	am-toggle-actions="play none none none"
+	am-yoyo="false"
+	am-repeat="0"
+	am-repeat-delay="0"
+	am-hover-pause="false"
+	am-scrub="false"
+	am-group-trigger=""
+	am-group-target=""
+	am-play-breakpoint=""
+	am-stop-breakpoint=""
+/>
+
+<!-- Variables - Element -->
+<meta
+	am-settings="element-variables"
+	am-element-order="0"
+	am-delay="0"
+	am-duration="1"
+	am-repeat="0"
+	am-repeat-delay="0"
+	am-stagger-amount="0"
+	am-stagger-from="start"
+	am-yoyo="false"
+	am-split-into="none"
+	am-ease="power2.out"
+	am-timeline-position="<"
+	am-tween="from"
+	am-var-target="element"
+	am-hover-pause="false"
+/>
+
+<!-- Properties - Element -->
+<meta
+	am-settings="element-properties"
+	am-display="block"
+	am-margin-top="0"
+	am-margin-bottom="0"
+	am-margin-right="0"
+	am-margin-left="0"
+	am-padding-top="0"
+	am-padding-bottom="0"
+	am-padding-right="0"
+	am-padding-left="0"
+	am-width="0"
+	am-height="0"
+	am-left="auto"
+	am-right="auto"
+	am-top="auto"
+	am-bottom="auto"
+	am-color="#fff"
+	am-background-color="transparent"
+	am-border-radius-all="0"
+	am-border-top-left-radius="0"
+	am-border-top-right-radius="0"
+	am-border-bottom-left-radius="0"
+	am-border-bottom-right-radius="0"
+	am-border-width-all="0"
+	am-boder-top-width="0"
+	am-border-bottom-width="0"
+	am-border-right-width="0"
+	am-border-left-width="0"
+	am-border-color-all="#000"
+	am-border-top-color="#000"
+	am-border-bottom-color="#000"
+	am-border-right-color="#000"
+	am-border-left-color="#000"
+	am-opacity="1"
+	am-position-x="0"
+	am-position-y="0"
+	am-posiiton-z="0"
+	am-rotation-x="0"
+	am-rotation-y="0"
+	am-rotation-z="0"
+	am-scale-x="1"
+	am-scale-y="1"
+	am-scale-Z="1"
+	am-skew-x="0"
+	am-skew-y="0"
+	am-brightness="1"
+/>
+
+<!-- Counter -->
+<meta
+	am-element-settings="counter"
+	am-tween="counter"
+	am-count-start="0"
+	am-count-to="inherit"
+	am-duration="2"
+	am-count-steps="1"
+	am-separator=","
+	am-ease="power1"
+/>
+
+<!-- Typewriter -->
+<meta
+	am-element-settings="typewriter"
+	am-duration="1"
+	am-repeat="-1"
+	am-repeat-delay="1"
+	am-words="word 1, word 2, word 3"
+/>
+
+<!-- Marquee -->
+<meta am-group-settings="marquee" am-scroll-start="top bottom" am-scroll-end="bottom bottom" />
+<meta
+	am-element-settings="marquee"
+	am-duration="60"
+	am-ease="none"
+	am-repeat="-1"
+	am-direction="left"
+	am-hover-pause="false"
+/>
+
+<!-- Hero Animation -->
+<meta am-group-settings="hero-animation" am-scroll-start="top bottom" am-scroll-end="bottom bottom" />
+<meta
+	am-element-settings="hero-animation"
+	am-position-y="2rem"
+	am-opacity="0"
+	am-duration="0.5"
+	am-ease="power1.out"
+	am-stagger-amount="1"
+/>
+
+<!-- Heading Split Animation -->
+<meta am-group-settings="split" am-scroll-start="top bottom" am-scroll-end="bottom bottom" />
+<meta
+	am-element-settings="split"
+	am-position-y="2rem"
+	am-opacity="0"
+	am-duration="0.5"
+	am-split-into="words"
+	am-ease="power1.out"
+	am-stagger-amount="1"
+/>

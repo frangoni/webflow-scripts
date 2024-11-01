@@ -1,0 +1,71 @@
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/embed/v2.js"></script>
+
+<script>
+	const cbInstance = Chargebee.init({
+		site: 'testfit-inc',
+	});
+
+	async function createCheckoutWithCart(formValues) {
+		try {
+			$('.chargebee_code-embed').remove();
+			$('.hubspot-form_title-wrapper').remove();
+			$('.chargebee_checkout-target').css('height', '30rem');
+			const cart = cbInstance.getCart();
+
+			// Set customer information
+			const customer = {
+				email: formValues.email,
+			};
+			cart.setCustomer(customer);
+
+			// Initialize and configure the product
+			const product = cbInstance.initializeProduct('TestFit-Data-Maps-USD-Yearly', 1);
+			product.isItemsModel = true;
+			cart.replaceProduct(product);
+
+			// Create the checkout
+			const checkout = await cbInstance.createCheckout({
+				cart,
+				callbacks: {
+					loaded: () => {
+						console.log('Checkout opened');
+					},
+					error: error => {
+						console.error('Error during checkout:', error);
+					},
+					close: () => {
+						console.log('Checkout closed');
+					},
+					success: data => {
+						console.log('Checkout success. ID:', data.id);
+					},
+					step: value => {
+						console.log('Checkout step:', value);
+					},
+					resize: value => {
+						console.log('Checkout page height:', value);
+					},
+				},
+			});
+
+			checkout.mount('#checkout');
+		} catch (error) {
+			console.error('An error occurred:', error);
+		}
+	}
+
+	hbspt.forms.create({
+		region: 'na1',
+		portalId: '3486113',
+		formId: '03b10c27-a2ef-4d67-85d7-1d0795d51107',
+		onFormSubmit: function ($form) {
+			const formData = {};
+			$form.find('input, select, textarea').each(function () {
+				const inputName = $(this).attr('name');
+				const inputValue = $(this).val();
+				formData[inputName] = inputValue;
+			});
+			createCheckoutWithCart(formData);
+		},
+	});
+</script>

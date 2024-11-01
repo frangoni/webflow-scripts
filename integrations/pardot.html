@@ -45,3 +45,40 @@
 			});
 	});
 </script>
+
+<script>
+	const AUTH_CONTENT = '[auth]';
+	const UNAUTH_CONTENT = '[unauth]';
+	const iframe = $('.sign_up-form iframe');
+
+	function getQueryParam(param) {
+		const urlParams = new URLSearchParams(window.location.search);
+		return urlParams.get(param);
+	}
+
+	function checkAccess() {
+		const isShared = getQueryParam('share') === 'true';
+		const isUnlocked = localStorage.getItem('unlocked') === 'true';
+
+		if (isShared) localStorage.setItem('unlocked', 'true');
+
+		if (!isShared && !isUnlocked) {
+			$(AUTH_CONTENT).hide();
+			$(UNAUTH_CONTENT).show();
+		} else {
+			if (iframe.length) iframe.remove();
+			$(AUTH_CONTENT).show();
+			$(UNAUTH_CONTENT).hide();
+
+			if (localStorage.getItem('hasScrolled') !== 'true') {
+				const gatedContent = $('#gated-content');
+				if (gatedContent.length) {
+					gatedContent[0].scrollIntoView({ behavior: 'smooth' });
+					localStorage.setItem('hasScrolled', 'true');
+				}
+			}
+		}
+	}
+
+	checkAccess();
+</script>

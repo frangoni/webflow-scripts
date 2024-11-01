@@ -1,0 +1,35 @@
+<!-- PARALLAX CONFIG  -->
+<script>
+	gsap.registerPlugin(ScrollTrigger);
+
+	const imageConfigs = [
+		{ selector: '[parallax-slow]', speed: 200 },
+		{ selector: '[parallax-medium]', speed: 400 },
+		{ selector: '[parallax-fast]', speed: 600 },
+	];
+
+	const triggers = document.querySelectorAll('[parallax-trigger]');
+
+	triggers.forEach(trigger => {
+		const scrub = trigger.getAttribute('scrub') === 'true';
+
+		imageConfigs.forEach(({ selector, speed }) => {
+			const images = trigger.querySelectorAll(selector);
+
+			images.forEach(image => {
+				gsap.from(image, {
+					y: speed,
+					duration: 1,
+					ease: 'power1.out',
+					scrollTrigger: {
+						trigger: trigger,
+						start: 'top+=30% bottom',
+						end: 'bottom-=10% top',
+						toggleActions: 'play none none reverse',
+						scrub,
+					},
+				});
+			});
+		});
+	});
+</script>

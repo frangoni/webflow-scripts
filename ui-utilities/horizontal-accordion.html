@@ -1,0 +1,100 @@
+<!-- Horizontal Accordion -->
+<script>
+	const TRIGGER_CLASS = '.solutions_accordion-container';
+	const ACTIVE_ATTR = '[has-active]';
+	const ACTIVE_CLASS = 'is-active';
+	const LABEL_CLASS = '.solutions_label';
+	const WRAPPER_CLASS = '.solutions_accordion-wrapper';
+	const PROGRESS_BAR_CLASS = '.solution_indicator-progress-bar';
+	const DURATION = 5; //in seconds
+	let interval;
+	let gsapProgressTween;
+
+	$(document).ready(function () {
+		function resetProgressBar() {
+			if (gsapProgressTween) gsapProgressTween.kill();
+			$(PROGRESS_BAR_CLASS).css('width', '0');
+		}
+		function animateProgressBar($progressBar) {
+			gsapProgressTween = gsap.to($progressBar, { width: '100%', duration: DURATION, ease: 'linear' });
+		}
+		function autoClickNext() {
+			const currentActive = $(`${TRIGGER_CLASS}.${ACTIVE_CLASS}`);
+			let next = currentActive.next(TRIGGER_CLASS);
+
+			if (!next.length) next = $(TRIGGER_CLASS).first();
+
+			next.trigger('click');
+		}
+
+		function startAutoClick() {
+			if (!interval) {
+				interval = setInterval(autoClickNext, DURATION * 1000);
+				animateProgressBar($(`${TRIGGER_CLASS}.${ACTIVE_CLASS}`).find(PROGRESS_BAR_CLASS));
+			}
+		}
+
+		function stopAutoClick() {
+			if (interval) {
+				clearInterval(interval);
+				interval = null;
+				resetProgressBar();
+			}
+		}
+
+		function resetAutoClick() {
+			stopAutoClick();
+			startAutoClick();
+		}
+
+		function synchronizeLabel(index) {
+			$(LABEL_CLASS).removeClass(ACTIVE_CLASS);
+			$(`${LABEL_CLASS}[is-label="${index}"]`).addClass(ACTIVE_CLASS);
+		}
+
+		function translateWrapper(index) {
+			if (window.innerWidth <= 767) {
+				const itemCount = $(TRIGGER_CLASS).length;
+				const translationValue = (index / itemCount) * 95;
+				$(WRAPPER_CLASS).css('transform', `translateX(-${translationValue}%)`);
+			} else {
+				$(WRAPPER_CLASS).css('transform', 'translateX(0)');
+			}
+		}
+
+		$(TRIGGER_CLASS).on('click', function () {
+			const isActive = $(this).hasClass(ACTIVE_CLASS);
+			if (isActive) return;
+
+			const index = $(this).index(TRIGGER_CLASS);
+
+			$(`${TRIGGER_CLASS}${ACTIVE_ATTR}`).not(this).find(ACTIVE_ATTR).removeClass(ACTIVE_CLASS);
+			$(TRIGGER_CLASS).not(this).removeClass(ACTIVE_CLASS);
+
+			$(this).find(ACTIVE_ATTR).toggleClass(ACTIVE_CLASS);
+			$(this).addClass(ACTIVE_CLASS);
+
+			synchronizeLabel(index);
+			translateWrapper(index);
+
+			resetProgressBar();
+			animateProgressBar($(this).find(PROGRESS_BAR_CLASS));
+
+			resetAutoClick();
+		});
+
+		function startAccordion() {
+			$(TRIGGER_CLASS).first().trigger('click');
+			startAutoClick();
+		}
+
+		ScrollTrigger.create({
+			trigger: '.section-solutions',
+			start: 'top center',
+			onEnter: startAccordion,
+			onEnterBack: startAutoClick,
+			onLeave: stopAutoClick,
+			onLeaveBack: stopAutoClick,
+		});
+	});
+</script>

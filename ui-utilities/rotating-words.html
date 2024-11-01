@@ -1,0 +1,64 @@
+<!-- Rotating Words -->
+<script>
+	const INITIAL_GRADIENT = 'linear-gradient(90deg,#eba3a5 50%,#ccc3e1)';
+	const SECOND_GRADIENT = 'linear-gradient(90deg,#edddd4,#f1a29f 89%)';
+
+	$(document).ready(function () {
+		$('.section-hero').each(function () {
+			gsap.set('.hero_rotating-word-wrapper', { y: '100%' });
+
+			const words = $('.hero_rotating-word-wrapper');
+			const tl = gsap.timeline({ repeat: -1 });
+
+			gsap.set(words.eq(0), { y: 0 });
+
+			tl.to(words.eq(0), {
+				y: '-100%',
+				duration: 1,
+				ease: 'power2.inOut',
+				delay: 2,
+			})
+				.to(
+					words.eq(0),
+					{
+						backgroundImage: SECOND_GRADIENT,
+						ease: 'power2.inOut',
+					},
+					'-=0.75'
+				)
+				.to(
+					words.eq(1),
+					{
+						y: '0%',
+						duration: 1,
+						ease: 'power2.inOut',
+					},
+					'-=1'
+				)
+
+				.to(words.eq(1), {
+					y: '100%',
+					duration: 1,
+					ease: 'power2.inOut',
+					delay: 2,
+				})
+				.to(
+					words.eq(0),
+					{
+						backgroundImage: INITIAL_GRADIENT,
+						ease: 'power2.inOut',
+					},
+					'-=0.75'
+				)
+				.to(
+					words.eq(0),
+					{
+						y: '0%',
+						duration: 1,
+						ease: 'power2.inOut',
+					},
+					'-=1'
+				);
+		});
+	});
+</script>

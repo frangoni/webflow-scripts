@@ -1,0 +1,59 @@
+<!--
+    CMS NEST SOLUTION
+    _________________
+    1- Add a link block inside CMS item and set attribute [am-nest-target=IDENTIFIER]
+    2- Anchor this link to child template page (where the nested list is)
+    3- Create a CMS list on template page and add attribute [am-nest-source=IDENTIFIER] to the list
+    4- Style the list as you wish to render on CMS Item (don't hide it! Hide the wrapper)
+    5- Add script to page where [am-nest-target=IDENTIFIER] is present. Before </body> tag
+-->
+
+<script>
+	const setNestTarget = () => {
+		$('[am-nest-target]').each(function () {
+			const target = $(this);
+
+			if (target.find('[hx-get]').length) return;
+
+			const nestIdentifier = target.attr('am-nest-target');
+			const href = target.attr('href');
+			const htmxDiv = $('<div></div>');
+
+			htmxDiv
+				.attr('hx-get', href)
+				.attr('hx-select', `[am-nest-source=${nestIdentifier}]`)
+				.attr('hx-target', 'this')
+				.attr('hx-swap', 'innerHTML ignoreTitle:true')
+				.attr('hx-trigger', 'load');
+
+			target.append(htmxDiv);
+			htmx.process(htmxDiv[0]);
+		});
+	};
+	$(document).ready(setNestTarget);
+
+	window.fsAttributes = window.fsAttributes || [];
+	window.fsAttributes.push([
+		'cmsload',
+		listInstances => {
+			const [listInstance] = listInstances;
+			listInstance.on('renderitems', setNestTarget);
+		},
+	]);
+	window.fsAttributes.push([
+		'cmsfilter',
+		filterInstances => {
+			const [filterInstance] = filterInstances;
+
+			/* $(document).on('htmx:afterSwap', async function (event) {
+				console.log('CMS FILTER', filterInstance);
+				await filterInstance.applyFilters(true);
+				await filterInstance.resetFilters('categories');
+			}); */
+
+			filterInstance.listInstance.on('renderitems', setNestTarget);
+		},
+	]);
+</script>
+
+<script src="https://unpkg.com/htmx.org@2.0.3"></script>
