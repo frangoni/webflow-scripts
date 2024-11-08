@@ -1,0 +1,68 @@
+<script>
+	import { gsap } from 'https://cdn.skypack.dev/gsap';
+	import { ScrollTrigger } from 'https://cdn.skypack.dev/gsap/ScrollTrigger';
+	import splittype from 'https://cdn.skypack.dev/split-type';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	function splitTextIntoChars() {
+		const textToSplit = document.querySelectorAll('.scroller-text');
+		new splittype(textToSplit, { types: 'chars' });
+	}
+
+	function unhideElements() {
+		const hiddenElements = document.querySelectorAll('.start-hidden');
+		hiddenElements.forEach(element => {
+			element.classList.remove('start-hidden');
+		});
+	}
+
+	function createScrollAnimation() {
+		const scrollerSection = document.querySelector('.scroller-section');
+		const chars = document.querySelectorAll('.char');
+
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: scrollerSection,
+				start: 'top top',
+				scrub: 1,
+				pin: true,
+				end: () => `+=${window.innerHeight * 2}`,
+				ease: 'none',
+				//   markers: true,
+			},
+		});
+
+		tl.fromTo(
+			chars,
+			{
+				rotateY: () => {
+					return Math.random() * 180 + 180; // Random number between 180 and 360
+				},
+				yPercent: () => {
+					return Math.random() * 100 - 50; // Random number between -50 and 50
+				},
+				xPercent: () => {
+					return Math.random() * 100 - 50; // Random number between -50 and 50
+				},
+				scale: 0,
+			},
+			{
+				rotateY: 0,
+				yPercent: 0,
+				xPercent: 0,
+				scale: 1,
+				stagger: {
+					amount: 1,
+					from: 'random',
+				},
+			}
+		);
+	}
+
+	document.addEventListener('DOMContentLoaded', () => {
+		splitTextIntoChars();
+		createScrollAnimation();
+		unhideElements(); // Unhide elements after the animation is created
+	});
+</script>

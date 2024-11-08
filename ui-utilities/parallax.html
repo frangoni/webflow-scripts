@@ -3,12 +3,12 @@
 	gsap.registerPlugin(ScrollTrigger);
 
 	const imageConfigs = [
-		{ selector: '[parallax-slow]', speed: 200 },
-		{ selector: '[parallax-medium]', speed: 400 },
-		{ selector: '[parallax-fast]', speed: 600 },
+		{ selector: '[px-slow]', speed: 50 },
+		{ selector: '[px-medium]', speed: 200 },
+		{ selector: '[px-fast]', speed: 300 },
 	];
 
-	const triggers = document.querySelectorAll('[parallax-trigger]');
+	const triggers = document.querySelectorAll('[px-trigger]');
 
 	triggers.forEach(trigger => {
 		const scrub = trigger.getAttribute('scrub') === 'true';
@@ -17,10 +17,18 @@
 			const images = trigger.querySelectorAll(selector);
 
 			images.forEach(image => {
+				const direction = image.getAttribute('px-direction') || 'up';
+				const delay = image.getAttribute('px-delay') || 0;
+
+				const translate = direction === 'up' || direction === 'down' ? 'y' : 'x';
+				const adjustedSpeed = direction === 'down' || direction === 'right' ? -speed : speed;
+
 				gsap.from(image, {
-					y: speed,
+					[translate]: adjustedSpeed,
+					opacity: 0,
 					duration: 1,
 					ease: 'power1.out',
+					delay,
 					scrollTrigger: {
 						trigger: trigger,
 						start: 'top+=30% bottom',
