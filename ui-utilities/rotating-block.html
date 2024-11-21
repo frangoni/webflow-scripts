@@ -1,11 +1,13 @@
 <script>
 	const blocks = document.querySelectorAll('.rotating_block');
+	const blocksWrapper = document.querySelector('.rotating_block-wrapper');
+	const wrapperHeight = blocksWrapper.clientHeight;
 	const duration = 2;
 
 	blocks.forEach((block, index) => {
 		gsap.set(block, {
 			rotateX: 90,
-			transformOrigin: 'center center -2.25rem', //half the height of the block
+			transformOrigin: `center center -${wrapperHeight / 2}px`, //half the height of the block
 		});
 	});
 
@@ -17,13 +19,13 @@
 				block,
 				{
 					rotateX: 0,
-					duration: duration,
+					duration,
 					ease: 'power2.inOut',
 				},
 				`-=${duration}` // Overlap with previous block
 			).to(block, {
 				rotateX: -90,
-				duration: duration * 2,
+				duration,
 				ease: 'power2.inOut',
 			});
 		});
