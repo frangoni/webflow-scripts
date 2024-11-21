@@ -1,0 +1,35 @@
+<script>
+	const blocks = document.querySelectorAll('.rotating_block');
+	const duration = 2;
+
+	blocks.forEach((block, index) => {
+		gsap.set(block, {
+			rotateX: 90,
+			transformOrigin: 'center center -2.25rem', //half the height of the block
+		});
+	});
+
+	function rotateBlocks() {
+		let tl = gsap.timeline({ repeat: -1 });
+
+		blocks.forEach((block, index) => {
+			tl.to(
+				block,
+				{
+					rotateX: 0,
+					duration: duration,
+					ease: 'power2.inOut',
+				},
+				`-=${duration}` // Overlap with previous block
+			).to(block, {
+				rotateX: -90,
+				duration: duration * 2,
+				ease: 'power2.inOut',
+			});
+		});
+
+		return tl;
+	}
+
+	rotateBlocks();
+</script>
