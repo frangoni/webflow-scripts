@@ -2,20 +2,16 @@
 <script>
 	$(document).ready(function () {
 		const banner = $('.announcement_banner');
-		console.log('BANNER', banner);
 		let disabled = banner.attr('banner_disabled');
 		let duration = banner.attr('banner_duration');
 		if (disabled === 'true') return;
-		console.log('not disabled', disabled);
 
 		const items = $('.announcement_layout_item');
 		items.clone().appendTo(banner);
 		items.clone().appendTo(banner);
 
 		let totalWidth = 0;
-		items.each(function () {
-			totalWidth += $(this).outerWidth(true);
-		});
+		items.each(() => (totalWidth += $(this).outerWidth(true)));
 
 		function startMarquee() {
 			gsap.to(banner, {

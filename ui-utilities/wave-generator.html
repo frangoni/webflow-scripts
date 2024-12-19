@@ -13,14 +13,14 @@
 	const scrollTriggerConfig = {
 		trigger: '.section-hero',
 		toggleActions: 'play pause resume reset',
+		repeat: -1,
 	};
 
 	const createWaveTimeline = (element, delay = 0) => {
 		return gsap
 			.timeline({
 				...scrollTriggerConfig,
-				repeat: -1,
-				delay: delay,
+				delay,
 			})
 			.to(element, { scale: '0.9', opacity: 1, duration: 1 })
 			.to(element, { scale: '3', opacity: '0', duration: 11 });
@@ -31,7 +31,6 @@
 	const waveGeneratorTl = gsap
 		.timeline({
 			scrollTrigger: scrollTriggerConfig,
-			repeat: -1,
 			ease: 'power4.in',
 		})
 		.to(waveGenerator, { scale: '0.9', duration: 1 })
