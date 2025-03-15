@@ -1,0 +1,31 @@
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const triggers = document.querySelectorAll('.pie_trigger');
+		const wrapper = document.querySelector('.pie_chart-wrapper');
+
+		const allElements = wrapper.querySelectorAll('[pie]');
+		allElements.forEach((element, i) => {
+			if (element.getAttribute('pie') === 'top-right') return;
+			element.style.opacity = 0;
+		});
+
+		triggers.forEach(trigger => {
+			const side = trigger.getAttribute('pie');
+			trigger.addEventListener('mouseenter', function () {
+				const showElements = wrapper.querySelectorAll(`[pie="${side}"]`);
+				const hideElements = wrapper.querySelectorAll(`[pie]:not([pie="${side}"])`);
+				const uncoloredMainSlice = wrapper.querySelector(`[base="${side}"]`);
+				const uncoloredNonMainSlices = wrapper.querySelectorAll(`[base]:not([base="${side}"])`);
+				const mainSlice = wrapper.querySelectorAll(`.colored_slices [pie="${side}"]`);
+				const nonMainSlices = wrapper.querySelectorAll(`.colored_slices [pie]:not([pie="${side}"])`);
+
+				gsap.to(hideElements, { opacity: 0, duration: 0.3 });
+				gsap.to(mainSlice[1], { scale: 1.1, duration: 0.3 });
+				gsap.to(uncoloredMainSlice, { scale: 1.1, duration: 0.3 });
+				gsap.to(uncoloredNonMainSlices, { scale: 1, duration: 0.3 });
+				gsap.to(nonMainSlices, { scale: 1, duration: 0.3 });
+				gsap.to(showElements, { opacity: 1, duration: 0.3 });
+			});
+		});
+	});
+</script>

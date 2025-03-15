@@ -1,0 +1,15 @@
+<script>
+	document.querySelectorAll('[names-wrapper]').forEach(wrapper => {
+		const speakerNames = wrapper.querySelectorAll('[author-name]');
+
+		speakerNames.forEach((speaker, index) => {
+			let currentContent = speaker.textContent;
+
+			if (index < speakerNames.length - 1) {
+				speaker.textContent = currentContent + ', ';
+			} else if (index === speakerNames.length - 1 && speakerNames.length > 1) {
+				speaker.textContent = 'and ' + currentContent;
+			}
+		});
+	});
+</script>

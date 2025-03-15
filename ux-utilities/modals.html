@@ -1,0 +1,28 @@
+<script>
+	/* 	
+	1. Create a modal component with a hidden class and style it as needed. Removing it will display the modal
+	2. Add [modal-open] attribute to the element that will open the modal
+	3. Add [modal-close] attribute to the element that will close the modal
+	4. Add [modal] attribute to the modal element
+	5. Add the same value to all elements attributes to link them to the same modal and have multiple instances
+	*/
+
+	$(document).ready(function () {
+		const HIDDEN_MODAL_CLASS = 'is-hidden';
+
+		$('[modal-open]').each(function () {
+			const $openModal = $(this);
+			const attr = $openModal.attr('modal-open');
+			const $modal = $(`[modal="${attr}"]`);
+			const $closeModal = $modal.find(`[modal-close="${attr}"]`);
+
+			$openModal.on('click', function () {
+				$modal.removeClass(HIDDEN_MODAL_CLASS);
+			});
+
+			$closeModal.on('click', function () {
+				$modal.addClass(HIDDEN_MODAL_CLASS);
+			});
+		});
+	});
+</script>

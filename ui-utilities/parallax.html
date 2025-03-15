@@ -1,42 +1,42 @@
 <!-- PARALLAX CONFIG  -->
+<!-- INSTRUCTIONS -->
+<!-- 1. Add the [px-trigger] attribute to the parent element that will trigger the parallax effect. -->
+<!-- 2. Add the [px-speed] attribute to the child element that will move. -->
+<!-- 3. Add the [px-direction] attribute to the child element to specify the direction of the movement. -->
+<!-- 4. Add the [px-delay] attribute to the child element to specify the delay of the movement. -->
+<!-- 5. Add the [scrub] attribute to the [px-trigger] element to enable scrubbing. -->
+<!-- 6. Add the [px-speed] attribute to the child element to specify the speed of the movement. -->
+
 <script>
 	gsap.registerPlugin(ScrollTrigger);
-
-	const imageConfigs = [
-		{ selector: '[px-slow]', speed: 50 },
-		{ selector: '[px-medium]', speed: 200 },
-		{ selector: '[px-fast]', speed: 300 },
-	];
 
 	const triggers = document.querySelectorAll('[px-trigger]');
 
 	triggers.forEach(trigger => {
-		const scrub = trigger.getAttribute('scrub') === 'true';
+		const scrub = trigger.getAttribute('px-scrub') === 'true';
+		const elements = trigger.querySelectorAll('[px-speed]');
 
-		imageConfigs.forEach(({ selector, speed }) => {
-			const images = trigger.querySelectorAll(selector);
+		elements.forEach(el => {
+			const direction = el.getAttribute('px-direction') || 'up';
+			const delay = el.getAttribute('px-delay') || 0;
+			const speed = el.getAttribute('px-speed') || 1;
 
-			images.forEach(image => {
-				const direction = image.getAttribute('px-direction') || 'up';
-				const delay = image.getAttribute('px-delay') || 0;
+			const translate = direction === 'up' || direction === 'down' ? 'y' : 'x';
+			const adjustedSpeed = direction === 'down' || direction === 'right' ? -speed : speed;
 
-				const translate = direction === 'up' || direction === 'down' ? 'y' : 'x';
-				const adjustedSpeed = direction === 'down' || direction === 'right' ? -speed : speed;
-
-				gsap.from(image, {
-					[translate]: adjustedSpeed,
-					opacity: 0,
-					duration: 1,
-					ease: 'power1.out',
-					delay,
-					scrollTrigger: {
-						trigger: trigger,
-						start: 'top+=30% bottom',
-						end: 'bottom-=10% top',
-						toggleActions: 'play none none reverse',
-						scrub,
-					},
-				});
+			gsap.from(el, {
+				[translate]: adjustedSpeed,
+				opacity: 0,
+				duration: 1,
+				ease: 'power1.out',
+				delay,
+				scrollTrigger: {
+					trigger: trigger,
+					start: 'top+=30% bottom',
+					end: 'bottom-=10% top',
+					toggleActions: 'play none none reverse',
+					scrub,
+				},
 			});
 		});
 	});
